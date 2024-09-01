@@ -49,4 +49,43 @@ const removeFood = async (req, res) => {
   }
 };
 
-module.exports = { addFood, foodList, removeFood };
+const fetchFood = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const food = await foodModel.findById({ _id: id });
+    return res.status(201).json({ success: true, food });
+  } catch (error) {
+    console.log(error);
+    return res.status(201).json({ success: false, error });
+  }
+};
+
+const editFood = async (req, res) => {
+  const { id } = req.params;
+  if (!req.file) {
+    return res.status(400).json({ error: "No file uploaded" });
+  }
+  let image_filename = req.file.filename;
+  try {
+    const food = await foodModel.findByIdAndUpdate(
+      { _id: id },
+      {
+        name: req.body.name,
+        description: req.body.description,
+        price: req.body.price,
+        category: req.body.category,
+        image: image_filename,
+      }
+    );
+    return res
+      .status(201)
+      .json({ success: true, message: "Food Updated Successfully", food });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Error editing food item", error });
+  }
+};
+
+module.exports = { addFood, foodList, removeFood, fetchFood, editFood };

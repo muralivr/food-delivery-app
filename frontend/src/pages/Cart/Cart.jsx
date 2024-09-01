@@ -3,11 +3,19 @@ import "./Cart.css";
 import { StoreContext } from "../../context/StoreContext";
 import { useNavigate } from "react-router-dom";
 
-function Cart() {
-  const { food_list, cartItem, removeCart, getTotalCartAmount, url } =
+function Cart({ setShowPopup }) {
+  const { food_list, cartItem, removeCart, getTotalCartAmount, url, token } =
     useContext(StoreContext);
 
   const navigate = useNavigate();
+
+  function handleCheckout() {
+    if (!token) {
+      setShowPopup(true);
+    } else {
+      navigate("/order");
+    }
+  }
 
   return (
     <div className="cart">
@@ -63,9 +71,7 @@ function Cart() {
               </b>
             </div>
           </div>
-          <button onClick={() => navigate("/order")}>
-            PROCEED TO CHECKOUT
-          </button>
+          <button onClick={handleCheckout}>PROCEED TO CHECKOUT</button>
         </div>
         <div className="cart-promocode">
           <div>

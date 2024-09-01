@@ -3,10 +3,11 @@ import "./LoginPopup.css";
 import { assets } from "../../assets/assets";
 import axios from "axios";
 import { StoreContext } from "../../context/StoreContext";
+import { toast } from "react-toastify";
 
 function LoginPopup({ setShowPopup }) {
   const [curState, setCurState] = useState("Login");
-  const {url, token, setToken} = useContext(StoreContext)
+  const { url, token, setToken } = useContext(StoreContext);
   const [data, setData] = useState({
     name: "",
     email: "",
@@ -21,23 +22,26 @@ function LoginPopup({ setShowPopup }) {
     } else {
       newUrl += "/api/user/register";
     }
-    await axios
-      .post(newUrl, data)
-      .then((res) => {
-        console.log(res);
-        
-        if (res.data.success) {
-          setToken(res.data.token);
-          localStorage.setItem("token", res.data.token);
-          setShowPopup(false)
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        
-        alert(err);
-      });
+    try {
+      const res = await axios.post(newUrl, data);
+      if (res.data.success) {
+        setToken(res.data.token);
+        localStorage.setItem("token", res.data.token);
+        setShowPopup(false);
+        toast.success(res.data.message);
+      }
+    } catch (err) {
+      console.log(err);
+
+      // Displaying error message in toast
+      if (err.response && err.response.data && err.response.data.message) {
+        toast.error(err.response.data.message);
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+      }
+    }
   }
+
   return (
     <div className="login-popup">
       <form className="login-popup-container" onSubmit={handleSubmit}>
@@ -98,25 +102,28 @@ function LoginPopup({ setShowPopup }) {
             </>
           )}
         </div>
-        {curState === "Logiin" ? (
+        {curState === "Login" ? (
           <button>Login</button>
         ) : (
           <button>Sign Up</button>
         )}
-        <div className="login-popup-condition">
-          <input type="checkbox" />
-          <p>By continuing, I agree to the terms of use & privacy policy</p>
-        </div>
+
         {curState === "Login" ? (
           <p>
             Create A New Account?
             <span onClick={() => setCurState("Signup")}>Sign Up</span>
           </p>
         ) : (
-          <p>
-            Already Have An Account?
-            <span onClick={() => setCurState("Login")}>Login</span>
-          </p>
+          <>
+            <div className="login-popup-condition">
+              <input type="checkbox" required/>
+              <p>By continuing, I agree to the terms of use & privacy policy</p>
+            </div>
+            <p>
+              Already Have An Account?
+              <span onClick={() => setCurState("Login")}>Login</span>
+            </p>
+          </>
         )}
       </form>
     </div>

@@ -5,7 +5,7 @@ import {assets} from '../../assets/assets.js'
 function Navbar() {
   return (
    <div className="navbar">
-    <img src={assets.logo} alt="" className="logo" />
+    <img src={assets.app_logo} alt="" className="logo" />
     <img src={assets.profile_image} alt="" className="profile" />
    </div>
   )

@@ -1,13 +1,11 @@
-import React from "react";
-import "./Add.css";
-import { assets } from "../../assets/assets";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import "./Edit.css";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-function Add({ url }) {
-  const [image, setImage] = useState(null); // Use `null` instead of `false` for consistency
+function Edit({ url }) {
+  const [image, setImage] = useState(null);
   const [data, setData] = useState({
     name: "",
     description: "",
@@ -15,44 +13,62 @@ function Add({ url }) {
     category: "",
   });
 
-  const navigate = useNavigate()
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    axios
+      .get(url + "/api/food/fetchfood/" + id)
+      .then((res) => {
+        setData(res.data.food);
+        setImage(`${url}/images/${res.data.food.image}`); // Set the image URL
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [id, url]);
 
   function handleChange(e) {
     const name = e.target.name;
     const value = e.target.value;
-    setData((prevData) => ({ ...prevData, [name]: value }));
+    setData((data) => ({ ...data, [name]: value }));
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
-    if (!data.category) {
-      toast.error("Category is required.");
-      return;
-    }
-    const formData = new FormData();
-    formData.append("name", data.name);
-    formData.append("description", data.description);
-    formData.append("price", Number(data.price));
-    formData.append("category", data.category);
-    if (image) {
-      formData.append("image", image);
-    }
     try {
-      const response = await axios.post(`${url}/api/food/add`, formData);
-      if (response.data.success) {
-        navigate("/list")
-        setData({
-          name: "",
-          description: "",
-          price: "",
-          category: "",
-        });
-        setImage(null);
-        toast.success(response.data.message);
+      const formData = new FormData();
+      formData.append("name", data.name);
+      formData.append("description", data.description);
+      formData.append("price", Number(data.price));
+      formData.append("category", data.category);
+
+      if (image instanceof File) {
+        formData.append("image", image); // Only append if it's a File object
       }
+
+      await axios
+        .put(`${url}/api/food/edit/${id}`, formData)
+        .then((res) => {
+          if (res.data.success) {
+            navigate("/list");
+            setData({
+              name: "",
+              description: "",
+              price: "",
+              category: "",
+            });
+            setImage(null);
+            toast.success(res.data.message);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          toast.error(error.message);
+        });
     } catch (error) {
       console.log(error);
-      toast.error("Error adding food item");
+      toast.error("Something went wrong.");
     }
   }
 
@@ -63,8 +79,12 @@ function Add({ url }) {
           <p>Upload Image</p>
           <label htmlFor="image">
             <img
-              src={image ? URL.createObjectURL(image) : assets.upload_area}
-              alt="Upload preview"
+              src={
+                image && typeof image === "string"
+                  ? image // Display the image URL from the server
+                  : image && URL.createObjectURL(image)
+              } // Create an object URL for the file
+              alt="Uploaded preview"
             />
           </label>
           <input
@@ -72,7 +92,6 @@ function Add({ url }) {
             type="file"
             id="image"
             hidden
-            required
           />
         </div>
         <div className="add-product-name flex-col">
@@ -99,8 +118,13 @@ function Add({ url }) {
         <div className="add-category-price">
           <div className="add-category flex-col">
             <p>Product Category</p>
-            <select name="category" onChange={handleChange} value={data.category}>
-              <option value="">Select a category</option> {/* Default option to prompt selection */}
+            <select
+              name="category"
+              onChange={handleChange}
+              value={data.category}
+            >
+              <option value="">Select a category</option>
+              {/* Default option to prompt selection */}
               <option value="Salad">Salad</option>
               <option value="Rolls">Rolls</option>
               <option value="Deserts">Deserts</option>
@@ -123,11 +147,11 @@ function Add({ url }) {
           </div>
         </div>
         <button type="submit" className="add-btn">
-          ADD
+          UPDATE
         </button>
       </form>
     </div>
   );
 }
 
-export default Add;
+export default Edit;

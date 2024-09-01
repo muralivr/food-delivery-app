@@ -4,6 +4,8 @@ const {
   addFood,
   foodList,
   removeFood,
+  fetchFood,
+  editFood,
 } = require("../controllers/foodController.js");
 
 const foodRouter = express.Router();
@@ -25,5 +27,11 @@ foodRouter.get("/list", foodList);
 
 //remove food
 foodRouter.delete("/remove/:id", removeFood);
+
+//fetch food based on food id
+foodRouter.get("/fetchfood/:id", fetchFood);
+
+//update food
+foodRouter.put("/edit/:id", upload.single("image"), editFood);
 
 module.exports = { foodRouter };

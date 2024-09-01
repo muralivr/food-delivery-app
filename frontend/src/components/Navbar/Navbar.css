@@ -6,7 +6,7 @@
 }
 
 .navbar .logo {
-  width: 150px;
+  width: 70px;
 }
 
 .navbar-menu {
@@ -60,11 +60,12 @@
   min-height: 10px;
   border-radius: 50px;
   padding: 2px;
+  font-size: 12px;
+  color: white;
 }
 
-.dot p{
-  font-size: 10px;
-  color: white;
+.dot{
+  
 }
 
 .navbar-profile{
@@ -108,7 +109,7 @@
 
 @media (max-width: 1050px) {
   .navbar .logo {
-    width: 140px;
+    width: 50px;
   }
   .navbar-menu {
     gap: 20px;
@@ -127,7 +128,7 @@
 
 @media (max-width: 900px) {
   .navbar .logo {
-    width: 120px;
+    width: 50px;
   }
   .navbar-menu {
     gap: 15px;

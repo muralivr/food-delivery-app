@@ -12,7 +12,9 @@ function Header() {
           restaurants with just a few clicks. Enjoy fast delivery and a variety
           of cuisines right at your doorstep.
         </p>
-        <button>View Menu</button>
+        <button>
+          <a href="#explore-menu">View Menu</a>
+        </button>
       </div>
     </div>
   );

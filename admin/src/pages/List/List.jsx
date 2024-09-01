@@ -4,9 +4,11 @@ import { useEffect } from "react";
 import axios from "axios";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { MdDeleteForever } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
-function List({url}) {
-  
+function List({ url }) {
   const [list, setList] = useState([]);
   async function fetchList() {
     await axios
@@ -30,12 +32,12 @@ function List({url}) {
       .then((res) => {
         if (res.data.success) {
           fetchList();
-          toast.success(res.data.message)
+          toast.success(res.data.message);
         }
       })
       .catch((err) => {
         console.log(err);
-        toast.error("Error")
+        toast.error("Error");
       });
   }
   return (
@@ -53,11 +55,17 @@ function List({url}) {
           return (
             <div key={index} className="list-table-format">
               <img src={`${url}/images/${food.image}`} alt="" />
-              <p>{food.name}</p>
+              <p>{food.name}<br></br>{food.description}</p>
               <p>{food.category}</p>
               <p>{food.price}</p>
-              <p onClick={() => removeFood(food._id)} className="cross">
-                X
+              <p className="action">
+                <MdDeleteForever
+                  onClick={() => removeFood(food._id)}
+                  className="delete"
+                />
+                <Link to={`/edit/${food._id}`} >
+                  <FaEdit className="edit"/>
+                </Link>
               </p>
             </div>
           );

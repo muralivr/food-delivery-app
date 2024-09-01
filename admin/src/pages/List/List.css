@@ -16,8 +16,21 @@
   width: 50px;
 }
 
-.cross{
-    cursor: pointer;
+.delete {
+  cursor: pointer;
+  font-size: 20px;
+  color: red;
+}
+
+.edit {
+  cursor: pointer;
+  font-size: 20px;
+  color: black;
+}
+
+.action{
+  display: flex;
+  gap: 5px;
 }
 
 @media (max-width: 600px) {

@@ -24,7 +24,24 @@
   align-items: center;
 }
 
-.footer-content-left li .footer-content-center li .footer-content-right li {
+.footer-content-left img{
+  margin-bottom: 10px;
+  width: 30%;
+}
+
+.footer-content-left li {
+  list-style: none;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.footer-content-center li{
+  list-style: none;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.footer-content-right li{
   list-style: none;
   margin-top: 10px;
   cursor: pointer;

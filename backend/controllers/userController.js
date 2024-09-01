@@ -17,7 +17,7 @@ const registerUser = async (req, res) => {
     if (user) {
       return res
         .status(401)
-        .json({ success: false, message: "User ALready Exists" });
+        .json({ success: false, message: "User Already Exists" });
     }
     if (!validator.isEmail(email)) {
       return res
@@ -43,7 +43,7 @@ const registerUser = async (req, res) => {
   } catch (error) {
     console.log(error);
 
-    return res.status(500).json({ success: false, error: error.message });
+    return res.status(500).json({ success: false, message:"Register Server Error" });
   }
 };
 
@@ -65,10 +65,10 @@ const loginUser = async (req, res) => {
     const token = createToken(user._id);
     return res
       .status(201)
-      .json({ success: true, message: "Logged In Successfully", token });
+      .json({ success: true, message: "Login Success", token });
   } catch (error) {
     console.log(error);
-    return res.status(401).json({ success: false, error });
+    return res.status(401).json({ success: false, message:"Login Server Error" });
   }
 };
 
