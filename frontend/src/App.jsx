@@ -11,25 +11,53 @@ import Verify from "./pages/Verify/Verify";
 import MyOrders from "./pages/MyOrders/MyOrders";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   const [showPopup, setShowPopup] = useState(false);
   return (
     <>
       <ToastContainer />
-        {showPopup ? <LoginPopup setShowPopup={setShowPopup} /> : <></>}
-        <div className="app">
-          <Navbar setShowPopup={setShowPopup} />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/cart" element={<Cart setShowPopup={setShowPopup}/>} />
-            <Route path="/order" element={<PlaceOrder />} />
-            <Route path="/verify" element={<Verify />} />
-            <Route path="/myorders" element={<MyOrders />} />
-          </Routes>
-        </div>
-        <Footer />
-      
+      {showPopup ? <LoginPopup setShowPopup={setShowPopup} /> : <></>}
+      <div className="app">
+        <Navbar setShowPopup={setShowPopup} />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/cart"
+            element={
+              <PrivateRoute>
+                <Cart setShowPopup={setShowPopup} />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/order"
+            element={
+              <PrivateRoute>
+                <PlaceOrder />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/verify"
+            element={
+              <PrivateRoute>
+                <Verify />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/myorders"
+            element={
+              <PrivateRoute>
+                <MyOrders />
+              </PrivateRoute>
+            }
+          />
+        </Routes>
+      </div>
+      <Footer />
     </>
   );
 }

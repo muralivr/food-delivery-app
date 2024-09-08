@@ -61,14 +61,17 @@ function Navbar({ setShowPopup }) {
         </a>
       </ul>
       <div className="navbar-right">
-        <img src={assets.search_icon} alt="" />
         <div className="navbar-search-icon">
           <Link to="/cart">
             <img src={assets.basket_icon} alt="" />
           </Link>
-          <div className={getTotalCartAmount() === 0 ? "empty" : "dot"}>
-            {getTotalCartAmount() === 0 ? " " : Object.keys(cartItem).length}
-          </div>
+          {token ? (
+            <div className={getTotalCartAmount() === 0 ? "empty" : "dot"}>
+              {getTotalCartAmount() === 0 ? " " : Object.keys(cartItem).length}
+            </div>
+          ) : (
+            ""
+          )}
         </div>
         {!token ? (
           <button onClick={() => setShowPopup(true)}>Sign In</button>

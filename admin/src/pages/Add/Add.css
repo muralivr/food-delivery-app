@@ -23,12 +23,26 @@
   width: max(40%, 280px);
 }
 
-.add-product-name input {
+input {
   padding: 10px;
+  border-radius: 5px;
+  border: 1px solid rgb(190, 189, 189);
+  outline: none;
 }
 
-.add-product-discription textarea {
+input:focus {
+  border: 1px solid tomato
+}
+
+textarea {
   padding: 10px;
+  border-radius: 5px;
+  border: 1px solid rgb(190, 189, 189);
+  outline: none;
+}
+
+textarea:focus {
+  border: 1px solid tomato
 }
 
 .add-category-price {
@@ -36,14 +50,14 @@
   gap: 30px;
 }
 
-.add-category-price select {
+select {
   max-width: 120px;
   padding: 10px;
+  border-radius: 5px;
+  border: 1px solid rgb(190, 189, 189);
+  outline: none;
 }
 
-.add-price input {
-  padding: 10px;
-}
 
 .add-btn {
   max-width: 120px;
